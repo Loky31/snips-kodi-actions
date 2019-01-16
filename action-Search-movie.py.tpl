@@ -29,12 +29,13 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 
 def action_wrapper(hermes, intentMessage, conf):
+    import time
 
     addon_name = conf['global']['favorite_addon1'] 
     movie_name = intentMessage.slots.movie_name.first().value
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
-    
+
     def openAddon():
         request = "{\"jsonrpc\": \"2.0\", \"method\": \"Addons.ExecuteAddon\", \"params\": { \"addonid\": \"plugin.video." + addon_name + "\", \"params\":{\"action\":\"alert\"}}, \"id\": \"1\"}"
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
