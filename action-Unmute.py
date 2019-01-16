@@ -30,9 +30,11 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 def action_wrapper(hermes, intentMessage, conf):
     """
-    PLAY
+    unmute
     """
 
+    import simplejson
+    import requests
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
     

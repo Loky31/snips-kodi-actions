@@ -32,6 +32,8 @@ def action_wrapper(hermes, intentMessage, conf):
     """
     Stop
     """
+    import simplejson
+    import requests
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
 

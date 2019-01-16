@@ -32,6 +32,8 @@ def action_wrapper(hermes, intentMessage, conf):
     """
     Home
     """
+    import simplejson
+    import requests
     def goHome():
         request = "{\"jsonrpc\": \"2.0\", \"method\": \"Input.Home\", \"params\": {}, \"id\": 1}"
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request

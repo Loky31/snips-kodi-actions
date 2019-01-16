@@ -30,7 +30,8 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 def action_wrapper(hermes, intentMessage, conf):
     import time
-
+    import simplejson
+    import requests
     addon_name = conf['global']['favorite_addon1'] 
     movie_name = intentMessage.slots.movie_name.first().value
     addr_ = conf['global']['ip']
