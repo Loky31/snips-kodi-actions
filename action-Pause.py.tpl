@@ -32,11 +32,9 @@ def action_wrapper(hermes, intentMessage, conf):
     """
         PUASE
     """
-    import requests
-    import json
 
-    addr_ = "192.168.0.42"
-    port_ = "8080"
+    addr_ = conf['global']['ip']
+    port_ =conf['global']['port']
 
     """ Return boolean if is playing """
     def isPlaying():
@@ -44,7 +42,7 @@ def action_wrapper(hermes, intentMessage, conf):
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
         
         response = requests.get(url)
-        json_data = json.loads(response.text)
+        json_data = simplejson.loads(response.text)
         speed = json_data['result']['speed']
         return speed > 0
 
@@ -56,18 +54,11 @@ def action_wrapper(hermes, intentMessage, conf):
         if 'error' in json_data:
             print(json_data['error'])
         
-    isPlaying()
 
     if isPlaying():
         pause()
 
     
-
-
-    
-
-
-
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
         h.subscribe_intent("{{intent_id}}", subscribe_intent_callback) \

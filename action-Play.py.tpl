@@ -32,11 +32,8 @@ def action_wrapper(hermes, intentMessage, conf):
     """
     PLAY
     """
-    import requests
-    import simplejson
-
-    addr_ = "192.168.0.42"
-    port_ = "8080"
+    addr_ = conf['global']['ip']
+    port_ =conf['global']['port']
 
     """ Return boolean if is playing """
     def isPlaying():
@@ -56,12 +53,8 @@ def action_wrapper(hermes, intentMessage, conf):
         if 'error' in json_data:
             print(json_data['error'])
         
-    isPlaying()
-
     if not isPlaying():
         play()
-
-    
 
 
 
