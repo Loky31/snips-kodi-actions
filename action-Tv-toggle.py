@@ -6,6 +6,9 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
 
+import simplejson
+import requests
+
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
@@ -32,19 +35,18 @@ def action_wrapper(hermes, intentMessage, conf):
     """
     PLAY
     """
-    import simplejson
-    import requests
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
 
-    request = "{\"jsonrpc\":\"2.0\",\"method\":\"Addons.ExecuteAddon\",\"params\":{\"addonid\":\"script.json-cec\",\"params\":{\"command\":\"toggle\"}},\"id\":1}"
-    url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
-    response = requests.get(url)
-    json_data = simplejson.loads(response.text)
-
-
-
-
+    try:           
+        request = "{\"jsonrpc\":\"2.0\",\"method\":\"Addons.ExecuteAddon\",\"params\":{\"addonid\":\"script.json-cec\",\"params\":{\"command\":\"toggle\"}},\"id\":1}"
+        url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
+        requests.get(url)
+        hermes.publish_end_session(intentMessage.session_id, "")
+    except requests.exceptions.RequestException:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
+    except Exception:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
 
 
 if __name__ == "__main__":

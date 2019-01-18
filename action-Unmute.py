@@ -6,6 +6,8 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
 
+import simplejson
+import requests
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
@@ -33,8 +35,6 @@ def action_wrapper(hermes, intentMessage, conf):
     unmute
     """
 
-    import simplejson
-    import requests
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
     
@@ -54,8 +54,18 @@ def action_wrapper(hermes, intentMessage, conf):
         if 'error' in json_data:
             print(json_data['error'])
                 
-    if isMute():
-        unmute()
+
+    try:           
+        if isMute():
+            unmute()
+        hermes.publish_end_session(intentMessage.session_id, "")
+    except requests.exceptions.RequestException:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
+    except Exception:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
+
+
+
     
 
 

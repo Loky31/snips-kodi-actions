@@ -6,6 +6,9 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
 
+import simplejson
+import requests
+
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
@@ -32,21 +35,20 @@ def action_wrapper(hermes, intentMessage, conf):
     """
     Home
     """
-    import simplejson
-    import requests
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
     def goHome():
         request = "{\"jsonrpc\": \"2.0\", \"method\": \"Input.Home\", \"params\": {}, \"id\": 1}"
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
-        response = requests.get(url)
+        requests.get(url)
 
-    goHome()
-    
-
-
-
-
+    try:           
+        goHome()
+        hermes.publish_end_session(intentMessage.session_id, "")
+    except requests.exceptions.RequestException:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
+    except Exception:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:

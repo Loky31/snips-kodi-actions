@@ -6,6 +6,10 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
 
+import simplejson
+import requests
+import time 
+
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
@@ -29,9 +33,7 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 
 def action_wrapper(hermes, intentMessage, conf):
-    import time    
-    import simplejson
-    import requests
+
     addon_name = conf['global']['favorite_addon1'] 
     movie_name = intentMessage.slots.tv_name.first().value
     addr_ = conf['global']['ip']
@@ -51,9 +53,17 @@ def action_wrapper(hermes, intentMessage, conf):
         response = requests.get(url)
         json_data = simplejson.loads(response.text)
 
-    openAddon()
-    time.sleep(3)
-    searchMovie()
+    try:           
+        openAddon()
+        time.sleep(3)
+        searchMovie()
+        hermes.publish_end_session(intentMessage.session_id, "")
+    except requests.exceptions.RequestException:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
+    except Exception:
+        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
+
+
 
 
 
