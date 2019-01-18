@@ -5,7 +5,7 @@ Skill for Snips voice assistant. Allow to remote the kodi application.
 ## Setup
 
 Add the application from the snips console on the for your assitant.
-:warning: Don't forget to modify the config.ini. Eather in snips console or once the file is uploaded on ypur device.
+<br>:warning: Don't forget to modify the config.ini. Eather in snips console or once the file is uploaded on ypur device.
 
 ## Configuration
 Modify <b>config.ini</b> to change with your ip and port. Moreover, you can change your favorite application for the command search movie/tv-show.<br>
